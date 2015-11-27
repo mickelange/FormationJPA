@@ -3,6 +3,10 @@
 	<persistence-unit name="FormationJPA">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<class>com.m2i.formation.media.entities.Media</class>
+		<class>com.m2i.formation.media.entities.Author</class>
+		<class>com.m2i.formation.media.entities.Card</class>
+		<class>com.m2i.formation.media.entities.Page</class>
+		<class>com.m2i.formation.media.entities.Publisher</class>
     	<properties>
     	
     		<!--  En cas d'erreur sur les entities cliquer-droit sur persistence.xml > JPA Tools > Synchronize class list -->

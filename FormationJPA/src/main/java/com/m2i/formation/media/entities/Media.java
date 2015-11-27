@@ -3,6 +3,7 @@ package com.m2i.formation.media.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -18,26 +19,20 @@ public class Media implements Serializable, IEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true, nullable=false)
-	private int id;
+	private Integer id;
 
-	private int category;
+	private Integer category;
 
 	@Temporal(TemporalType.DATE)
 	private Date dateParution;
 
-	@Column(nullable=true)
-	private Integer id_Publisher;
-
 	@Column(length=25)
 	private String langue;
-	
-	@Column(nullable=true)
+
 	private Integer nbPages;
-	
-	@Column(nullable=true)
+
 	private Integer nbTracks;
 
-	@Column(nullable=true)
 	private Integer numISBN;
 
 	@Column(nullable=false)
@@ -46,22 +41,39 @@ public class Media implements Serializable, IEntity {
 	@Column(nullable=false, length=50)
 	private String title;
 
+	//bi-directional many-to-many association to Author
+	@ManyToMany(mappedBy="medias",cascade=CascadeType.ALL)
+	private List<Author> authors;
+
+	//bi-directional many-to-many association to Card
+	@ManyToMany(mappedBy="medias",cascade=CascadeType.ALL)
+	private List<Card> cards;
+
+	//bi-directional many-to-one association to Publisher
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="id_Publisher")
+	private Publisher publisher;
+
+	//bi-directional many-to-one association to Page
+	@OneToMany(mappedBy="media")
+	private List<Page> pages;
+
 	public Media() {
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public int getCategory() {
+	public Integer getCategory() {
 		return this.category;
 	}
 
-	public void setCategory(int category) {
+	public void setCategory(Integer category) {
 		this.category = category;
 	}
 
@@ -73,14 +85,6 @@ public class Media implements Serializable, IEntity {
 		this.dateParution = dateParution;
 	}
 
-	public int getId_Publisher() {
-		return this.id_Publisher;
-	}
-
-	public void setId_Publisher(int id_Publisher) {
-		this.id_Publisher = id_Publisher;
-	}
-
 	public String getLangue() {
 		return this.langue;
 	}
@@ -89,27 +93,27 @@ public class Media implements Serializable, IEntity {
 		this.langue = langue;
 	}
 
-	public int getNbPages() {
+	public Integer getNbPages() {
 		return this.nbPages;
 	}
 
-	public void setNbPages(int nbPages) {
+	public void setNbPages(Integer nbPages) {
 		this.nbPages = nbPages;
 	}
 
-	public int getNbTracks() {
+	public Integer getNbTracks() {
 		return this.nbTracks;
 	}
 
-	public void setNbTracks(int nbTracks) {
+	public void setNbTracks(Integer nbTracks) {
 		this.nbTracks = nbTracks;
 	}
 
-	public int getNumISBN() {
+	public Integer getNumISBN() {
 		return this.numISBN;
 	}
 
-	public void setNumISBN(int numISBN) {
+	public void setNumISBN(Integer numISBN) {
 		this.numISBN = numISBN;
 	}
 
@@ -128,5 +132,55 @@ public class Media implements Serializable, IEntity {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+	public List<Author> getAuthors() {
+		return this.authors;
+	}
+
+	public void setAuthors(List<Author> authors) {
+		this.authors = authors;
+	}
+
+	public List<Card> getCards() {
+		return this.cards;
+	}
+
+	public void setCards(List<Card> cards) {
+		this.cards = cards;
+	}
+
+	public Publisher getPublisher() {
+		return this.publisher;
+	}
+
+	public void setPublisher(Publisher publisher) {
+		this.publisher = publisher;
+	}
+
+	public List<Page> getPages() {
+		return this.pages;
+	}
+
+	public void setPages(List<Page> pages) {
+		this.pages = pages;
+	}
+
+	public Page addPage(Page page) {
+		getPages().add(page);
+		page.setMedia(this);
+
+		return page;
+	}
+
+	public Page removePage(Page page) {
+		getPages().remove(page);
+		page.setMedia(null);
+
+		return page;
+	}
+
+	
+
+	
 
 }
